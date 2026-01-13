@@ -401,6 +401,110 @@ def create_us_map_with_labels(
     return fig
 
 
+def create_us_map_current(
+    metrics: pd.DataFrame, 
+    brand: str = "",
+    color_by: str = "current_sos"
+) -> "plotly.graph_objects.Figure":
+    """
+    Create US choropleth map with text labels showing CURRENT SoS and Volume on each state.
+    
+    Args:
+        metrics: DataFrame from calculate_yoy_metrics() - must have columns:
+                 state_abbrev, current_sos, current_volume
+        brand: Brand name for title
+        color_by: Column to use for coloring states ('current_sos' or 'current_volume')
+    
+    Returns:
+        Plotly Figure object with state labels showing current metrics
+    """
+    import plotly.graph_objects as go
+    
+    # Create choropleth
+    fig = go.Figure()
+    
+    # Round the metrics
+    metrics = metrics.copy()
+    metrics['current_sos'] = metrics['current_sos'].round(1)
+    
+    # Determine colorscale based on what we're coloring by
+    if color_by == 'current_sos':
+        colorscale = 'Greens'
+        colorbar_title = 'SoS (%)'
+    else:
+        colorscale = 'Blues'
+        colorbar_title = 'Volume'
+    
+    # Add choropleth layer
+    fig.add_trace(go.Choropleth(
+        locations=metrics['state_abbrev'],
+        z=metrics[color_by],
+        locationmode='USA-states',
+        colorscale=colorscale,
+        text=metrics['state'],
+        hovertemplate=(
+            '<b>%{text}</b><br>'
+            'SoS: %{customdata[0]:.1f}%<br>'
+            'Volume: %{customdata[1]:,.0f}<extra></extra>'
+        ),
+        customdata=metrics[['current_sos', 'current_volume']].values,
+        colorbar=dict(
+            title=colorbar_title,
+            x=1.0
+        ),
+    ))
+    
+    # Add text labels for each state
+    for _, row in metrics.iterrows():
+        abbrev = row['state_abbrev']
+        if abbrev in STATE_COORDS:
+            lat, lon = STATE_COORDS[abbrev]
+            
+            # Format the label text - current metrics
+            current_sos = row['current_sos']
+            current_vol = row['current_volume']
+            
+            # Format volume with K/M suffix for readability
+            if current_vol >= 1_000_000:
+                vol_str = f"{current_vol/1_000_000:.1f}M"
+            elif current_vol >= 1_000:
+                vol_str = f"{current_vol/1_000:.1f}K"
+            else:
+                vol_str = f"{current_vol:.0f}"
+            
+            label_text = f"<b>{abbrev}<br>SoS: {current_sos:.1f}%<br>Vol: {vol_str}</b>"
+            
+            fig.add_trace(go.Scattergeo(
+                lon=[lon],
+                lat=[lat],
+                text=[label_text],
+                mode='text',
+                textfont=dict(size=14, color='black', family='Arial Black'),
+                showlegend=False,
+                hoverinfo='skip',
+            ))
+    
+    fig.update_geos(
+        scope='usa',
+        bgcolor='rgba(0,0,0,0)',
+    )
+    
+    title_text = f'{brand} - Current Share of Search by State' if brand else 'Current Share of Search by State'
+    
+    fig.update_layout(
+        title=dict(
+            text=title_text,
+            x=0.5
+        ),
+        paper_bgcolor='white',
+        font=dict(family='Arial', size=12),
+        height=600,
+        margin=dict(l=0, r=0, t=50, b=0),
+    )
+    
+    return fig
+
+
 def create_us_map_sos(metrics: pd.DataFrame, brand: str = "") -> "plotly.graph_objects.Figure":
     """
     Create US choropleth map showing YoY Share of Search change by state.
