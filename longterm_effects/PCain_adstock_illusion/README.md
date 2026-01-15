@@ -161,7 +161,4 @@ Applied Marketing Analytics, 11(1), 23-42.
 This implementation is for educational purposes, replicating published academic research.
 
 ---
-
-**Created by:** Claude (Anthropic)  
 **Date:** January 2026  
-**Based on:** Cain, P.M. (2025)
