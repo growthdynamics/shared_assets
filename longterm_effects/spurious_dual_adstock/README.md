@@ -191,5 +191,3 @@ For questions about using this package with your data, consider:
 ---
 
 **Created**: January 2026  
-**Purpose**: Help practitioners detect spurious regression in MMM  
-**Philosophy**: Expose problems clearly; don't oversell solutions
