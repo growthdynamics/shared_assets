@@ -6,7 +6,7 @@
 
 There is so much noise in marketing data that, by experience, I know it is almost impossible to measure the long-term effect. Signals over time are drowned in the noise, and all channels' adstock end up being highly correlated. 
 
-**Most of "long-term effect measurement" sold by vendors are borderline snake oil.** Don't believe any vendor who says they solved it.
+**Most of "long-term effect measurement" sold by vendors are borderline snake oil.** A lot of solutions look elegant in theory but then fall apart in practice. Be very skeptical when vendors claim they've solved long-term measurement. Ask to see their Durbin-Watson statistics, retention rates, and residual diagnostics. If they won't share or don't know what you're asking about that is a red flag
 
 Now, it does not mean that we should not try, and give some credit to people who try. This repository presents research by P.M. Cain (2025) that exposes one specific problem and proposes alternatives. Are these alternatives perfect? No. But they're more honest about what we can and cannot measure.
 
@@ -278,14 +278,12 @@ Say: "TV shows medium-term effects of 15-45% (wide range due to measurement unce
 
 **From Charlie:**
 
-I've been doing marketing analytics for years. I've seen countless "solutions" to long-term measurement. Most are garbage.
-
 This repository doesn't claim to have the answer. What it does is:
 1. Show you one approach that's definitely wrong (dual-adstock with high retention)
 2. Show you some approaches that are less wrong (but still imperfect)
 3. Give you tools to evaluate claims critically
 
-**The honest truth:** Long-term effects are really hard to measure. Anyone who tells you otherwise is either naive or selling something.
+**The honest truth:** Long-term effects are really hard to measure. Anyone who tells you otherwise is likely either naive or selling something.
 
 But that doesn't mean we give up. It means we're honest about uncertainty, we validate carefully, and we don't oversell our confidence.
 
